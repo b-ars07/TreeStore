@@ -17,13 +17,13 @@
 // ТРЕБОВАНИЕ: максимальное быстродействие, следовательно, минимальное количество обходов массива при операциях,
 // * в идеале, прямой доступ к элементам без поиска их в массиве.
 
-interface Item {
+export interface Item {
     id: string | number;
     parent: string | number;
     type?: unknown;
 }
 
-class TreeStore {
+export class TreeStore {
     private readonly items: Item[];
     private itemsMap: Map<string | number, Item>;
     private parentMap: Map<string | number, Item[]>;
