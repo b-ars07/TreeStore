@@ -77,6 +77,23 @@ class TreeStore {
 
         return result;
     }
+
+    getAllParents(id: string | number): Item[] {
+        const result: Item[] = [];
+        let currentItemId = this.getItem(id)
+
+        while(currentItemId) {
+            result.push(currentItemId)
+
+            if (currentItemId.parent === 'root') {
+                break
+            }
+
+            currentItemId = this.getItem(currentItemId.parent)
+        }
+
+        return result
+    }
 }
 
 
@@ -99,3 +116,5 @@ console.log(ts.getAll())
 console.log(ts.getItem(7))
 console.log(ts.getChildren(4));
 console.log(ts.getChildren(5));
+console.log(ts.getAllChildren(2));
+console.log(ts.getAllParents(7));
