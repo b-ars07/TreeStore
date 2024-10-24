@@ -17,8 +17,68 @@
 // ТРЕБОВАНИЕ: максимальное быстродействие, следовательно, минимальное количество обходов массива при операциях,
 // * в идеале, прямой доступ к элементам без поиска их в массиве.
 
+interface Item {
+    id: string | number;
+    parent: string | number;
+    type?: unknown;
+}
 
-class TreeStore {}
+class TreeStore {
+    private readonly items: Item[];
+    private itemsMap: Map<string | number, Item>;
+    private parentMap: Map<string | number, Item[]>;
+
+    constructor(items: Item[]) {
+        this.items = items;
+        this.itemsMap = new Map<string | number, Item>();
+        this.parentMap = new Map<string | number, Item[]>()
+
+        for (const item of items) {
+            const parentId = item.parent
+            let children = this.parentMap.get(parentId);
+
+            this.itemsMap.set(item.id, item);
+
+            if (!children) {
+                children = [] as Item[];
+                this.parentMap.set(parentId, children);
+            }
+
+            children.push(item)
+
+        }
+    }
+
+    getAll(): Item[] {
+        return this.items;
+    }
+
+    getItem(id: string | number): Item | undefined {
+        return this.itemsMap.get(id);
+    }
+
+    getChildren(id: string | number): Item[] {
+        return this.parentMap.get(id) ?? []
+    }
+
+    getAllChildren(id: string | number): Item[] {
+        const result: Item[] = [];
+        const stack: (string | number)[] = [id];
+
+        while (stack.length > 0) {
+            const currentId = stack.pop()!;
+            const children = this.getChildren(currentId);
+
+            for (const child of children) {
+                result.push(child);
+                stack.push(child.id);
+            }
+        }
+
+        return result;
+    }
+}
+
 
 const items = [
     { id: 1, parent: 'root' },
@@ -34,3 +94,8 @@ const items = [
 ];
 
 const ts = new TreeStore(items);
+
+console.log(ts.getAll())
+console.log(ts.getItem(7))
+console.log(ts.getChildren(4));
+console.log(ts.getChildren(5));
