@@ -1,4 +1,4 @@
-import {TreeStore, Item} from "../treeStore";
+import {TreeStore, Item} from "../TreeStore";
 
 describe('TreeStore', () => {
     let items: Item[];
